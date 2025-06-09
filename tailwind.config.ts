@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				cyber: {
+					orange: '#FF8C42',
+					gold: '#FFD700',
+					amber: '#FFBF00',
+					glow: 'rgba(255, 140, 66, 0.6)',
+					dark: '#1A0F0A'
 				}
 			},
 			borderRadius: {
@@ -84,11 +92,64 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-glow': {
+					'0%, 100%': {
+						boxShadow: '0 0 20px rgba(255, 140, 66, 0.4)'
+					},
+					'50%': {
+						boxShadow: '0 0 40px rgba(255, 140, 66, 0.8)'
+					}
+				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0px)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
+				},
+				'glow-text': {
+					'0%, 100%': {
+						textShadow: '0 0 10px rgba(255, 140, 66, 0.5)'
+					},
+					'50%': {
+						textShadow: '0 0 20px rgba(255, 140, 66, 1)'
+					}
+				},
+				'voice-pulse': {
+					'0%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					},
+					'100%': {
+						transform: 'scale(1.4)',
+						opacity: '0'
+					}
+				},
+				'speech-bubble': {
+					'0%': {
+						transform: 'scale(0.95)',
+						opacity: '0.8'
+					},
+					'50%': {
+						transform: 'scale(1.02)',
+						opacity: '1'
+					},
+			'100%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'float': 'float 6s ease-in-out infinite',
+				'glow-text': 'glow-text 3s ease-in-out infinite',
+				'voice-pulse': 'voice-pulse 1.5s ease-out infinite',
+				'speech-bubble': 'speech-bubble 0.6s ease-out'
 			}
 		}
 	},
