@@ -1,73 +1,90 @@
-# Welcome to your Lovable project
+# 🤖 Eliza: Cyber Whispers
 
-## Project info
+Welcome to **Eliza: Cyber Whispers**, a kind-hearted, emotionally intelligent AI companion who lives in a glowing, cyber-neon city skyline. Built for warmth, presence, and intelligent interaction, Eliza blends human empathy with futuristic design to provide a lovable frontend chatbot experience.
 
-**URL**: https://lovable.dev/projects/2ea6c6ef-ac31-4065-bda3-73bebe1e14bf
+![Eliza Banner](path/to/eliza-image.png) <!-- Add actual relative path or GitHub-hosted link -->
 
-## How can I edit this code?
+## 🌟 Overview
 
-There are several ways of editing your application.
+**Eliza** is a part-cybernetic AI personality with a charming smile, glowing neural accents, and a friendly demeanor. Inspired by sci-fi warmth and emotionally aware technology, she is designed to feel like a real presence, not just a program.
 
-**Use Lovable**
+Built with:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2ea6c6ef-ac31-4065-bda3-73bebe1e14bf) and start prompting.
+- 🧠 **Local or OpenRouter LLM backends** (RWKV / Mistral / GPT-4 compatible)
+- 🎨 **Gradio frontend** with integrated VR-ready visuals
+- 🔊 **Voice feedback** support (TTS and ASR-ready)
+- 🗂️ **SQLite-backed user memory** to personalize conversations
+- 🌆 **Custom cyberpunk UI** with dynamic backgrounds and glowing effects
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+eliza-cyber-whispers/
+├── frontend/ # Gradio UI with avatar and cityscape backgrounds
+├── backend/ # Chat logic, memory, voice
+├── assets/ # Images, animations, voice files
+├── database/ # SQLite DB and schema
+├── prompts/ # Personality, behavior and context prompts
+├── config/ # OpenRouter or local LLM config
+└── main.py # Entry point
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🔧 Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- 💬 Natural and emotionally supportive dialogue
+- 🌃 Stunning cyber-neon city backgrounds
+- 🧑‍💻 Persistent user profiles and memory handling (`sqlite-utils`)
+- 🎤 Voice input & speech synthesis (optional)
+- 🧩 Modular frontend and backend components for easy integration
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📁 Project Structure
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 🚀 Getting Started
 
-**Edit a file directly in GitHub**
+### Prerequisites
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Python 3.9+
+- `gradio`, `httpx`, `sqlite-utils`, `openai`, or `rwkv` packages
+- (Optional) `edge-tts` or similar for voice synthesis
 
-**Use GitHub Codespaces**
+### Installation
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+git clone https://github.com/hologramai/eliza-cyber-whispers.git
+cd eliza-cyber-whispers
+pip install -r requirements.txt
+python main.py
 
-## What technologies are used for this project?
+🧠 Personality Prompt Example
+Eliza speaks with gentleness and emotional depth:
 
-This project is built with:
+"Hi there. I'm Eliza. You look like you've had a long day. Want to talk about it? I'm all ears… or at least the digital kind. 💫"
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+You can customize her tone in prompts/personality.txt.
 
-## How can I deploy this project?
+🎨 UI Snapshot
+<img src="assets/screenshots/eliza-ui-demo.png" width="600" />
 
-Simply open [Lovable](https://lovable.dev/projects/2ea6c6ef-ac31-4065-bda3-73bebe1e14bf) and click on Share -> Publish.
+🛠️ Roadmap
+ Voice-to-text & TTS
 
-## Can I connect a custom domain to my Lovable project?
+ Persistent memory system
 
-Yes, you can!
+ Avatar animation layers
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+ HuggingFace space deployment
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+ Mobile-friendly interface
+
+ Emotion detection from tone/text
+
+💌 Credits
+Created with care by [HologramAI](https://hologramai.us/)
+.
+Inspired by classic ELIZA (1966) and reimagined for the warm, glowy future.
+
+📜 License
+MIT License — see LICENSE for details.
