@@ -1,42 +1,29 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
 @layer base {
   :root {
     --background: 26 15 10;
     --foreground: 255 255 255;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 33 100% 63%;
+    --primary: 315 100% 70%;
     --primary-foreground: 26 15 10;
-
-    --secondary: 45 100% 50%;
+    --secondary: 280 100% 60%;
     --secondary-foreground: 26 15 10;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 33 100% 63%;
+    --accent: 315 100% 70%;
     --accent-foreground: 26 15 10;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 45 100% 50%;
-    --input: 26 15 10;
-    --ring: 33 100% 63%;
-
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 315 100% 70%;
     --radius: 0.75rem;
-
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -46,27 +33,25 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
 
-@layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-cyber-dark text-foreground;
     background: linear-gradient(135deg, #1A0F0A 0%, #2D1810 50%, #1A0F0A 100%);
+    color: hsl(var(--foreground));
     min-height: 100vh;
   }
 }
 
 @layer components {
   .cyber-glow {
-    box-shadow: 0 0 20px rgba(255, 140, 66, 0.3);
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
   }
   
   .cyber-text-glow {
-    text-shadow: 0 0 10px rgba(255, 140, 66, 0.5);
+    text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
   }
   
   .cyber-bg-blur {
@@ -74,3 +59,66 @@
     background: rgba(26, 15, 10, 0.6);
   }
 }
+
+/* Existing UI animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 20px rgba(255, 20, 196, 0.3); }
+  100% { box-shadow: 0 0 40px rgba(255, 20, 196, 0.6); }
+}
+
+@keyframes voice-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes speech-bubble {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+.animate-voice-pulse {
+  animation: voice-pulse 1s ease-in-out infinite;
+}
+
+.animate-speech-bubble {
+  animation: speech-bubble 0.3s ease-out;
+}
+
+/* Cyber color utilities */
+.text-cyber-dark { color: #1A0F0A; }
+.text-cyber-pink { color: #FF14C4; }
+.text-cyber-purple { color: #8B5CF6; }
+.text-cyber-magenta { color: #E879F9; }
+.text-cyber-violet { color: #A855F7; }
+.text-cyber-gold { color: #FFD700; }
+
+.bg-cyber-dark { background-color: #1A0F0A; }
+.bg-cyber-pink { background-color: #FF14C4; }
+.bg-cyber-purple { background-color: #8B5CF6; }
+.bg-cyber-magenta { background-color: #E879F9; }
+.bg-cyber-violet { background-color: #A855F7; }
+.bg-cyber-gold { background-color: #FFD700; }
+
+.border-cyber-pink { border-color: #FF14C4; }
+.border-cyber-purple { border-color: #8B5CF6; }
+.border-cyber-magenta { border-color: #E879F9; }
+
+.bg-cyber-dark\/80 { background-color: rgba(26, 15, 10, 0.8); }
+.bg-cyber-purple\/20 { background-color: rgba(139, 92, 246, 0.2); }
+.border-cyber-pink\/30 { border-color: rgba(255, 20, 196, 0.3); }
+.border-cyber-pink\/40 { border-color: rgba(255, 20, 196, 0.4); }
+.border-cyber-magenta\/30 { border-color: rgba(232, 121, 249, 0.3); }
+.text-cyber-pink\/60 { color: rgba(255, 20, 196, 0.6); }

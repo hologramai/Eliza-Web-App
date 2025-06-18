@@ -1,0 +1,411 @@
+/* Eliza Interface Styles */
+
+.eliza-container {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.eliza-background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('/lovable-uploads/b5f3a4ac-74ae-4ee5-bb86-c7bafe53a9b0.png');
+  filter: blur(1px) brightness(0.7);
+}
+
+.eliza-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, rgba(26, 15, 10, 0.3) 50%, rgba(26, 15, 10, 0.8));
+}
+
+.eliza-circuit-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background-image: url('/lovable-uploads/a6c5eadc-58d6-447d-97f7-dfcf0c90981e.png');
+  background-size: cover;
+  background-position: center;
+  filter: hue-rotate(20deg);
+}
+
+.eliza-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.eliza-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.eliza-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.eliza-button {
+  color: white;
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eliza-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.eliza-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.eliza-wallet-button {
+  padding: 0.5rem 1rem;
+}
+
+.eliza-message-counter {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.eliza-main {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  padding-top: 0;
+}
+
+.eliza-status {
+  width: 100%;
+  max-width: 42rem;
+  margin-bottom: 1rem;
+}
+
+.eliza-status-text {
+  text-align: center;
+  color: white;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.eliza-avatar-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.eliza-avatar {
+  width: 20rem;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 140, 66, 0.3);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.eliza-avatar.floating {
+  animation: pulse-glow 2s ease-in-out infinite, float 6s ease-in-out infinite;
+}
+
+.eliza-voice-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.eliza-voice-icon {
+  width: 2rem;
+  height: 2rem;
+  transition: color 0.3s ease;
+  color: white;
+}
+
+.eliza-voice-icon.active {
+  color: rgb(248, 187, 208); /* pink-300 */
+}
+
+.eliza-voice-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(248, 187, 208, 0.3);
+  animation: voice-pulse 1.5s ease-in-out infinite;
+}
+
+.eliza-voice-pulse.delayed {
+  background: rgba(248, 187, 208, 0.2);
+  animation-delay: 0.3s;
+}
+
+.eliza-chat-container {
+  width: 100%;
+  max-width: 42rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.eliza-messages {
+  max-height: 15rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.eliza-message-row {
+  display: flex;
+}
+
+.eliza-message-row.user {
+  justify-content: flex-end;
+}
+
+.eliza-message-row.eliza {
+  justify-content: flex-start;
+}
+
+.eliza-message {
+  max-width: 20rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  background: rgba(26, 15, 10, 0.6);
+}
+
+.eliza-message.user {
+  background: rgba(255, 140, 66, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: white;
+}
+
+.eliza-message.eliza {
+  background: rgba(26, 15, 10, 0.8);
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  color: rgb(248, 187, 208);
+  text-shadow: 0 0 10px rgba(248, 187, 208, 0.5);
+  animation: speech-bubble 0.3s ease-out;
+}
+
+.eliza-message-text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.eliza-typing {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.eliza-typing-bubble {
+  background: rgba(26, 15, 10, 0.8);
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.eliza-typing-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.eliza-typing-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: rgb(248, 187, 208);
+  border-radius: 50%;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.eliza-typing-dot:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.eliza-typing-dot:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.eliza-input-section {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.eliza-input-container {
+  flex: 1;
+  position: relative;
+}
+
+.eliza-input {
+  width: 100%;
+  background: rgba(26, 15, 10, 0.6);
+  border: 2px solid rgba(255, 140, 66, 0.4);
+  color: white;
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.125rem;
+  backdrop-filter: blur(10px);
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(255, 140, 66, 0.1);
+}
+
+.eliza-input::placeholder {
+  color: rgba(255, 140, 66, 0.6);
+}
+
+.eliza-input:focus {
+  border-color: rgb(255, 215, 0);
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+}
+
+.eliza-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.eliza-send-button {
+  background: linear-gradient(45deg, rgb(255, 140, 66), rgb(255, 215, 0));
+  color: rgb(26, 15, 10);
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(255, 140, 66, 0.3);
+}
+
+.eliza-send-button:hover:not(:disabled) {
+  background: linear-gradient(45deg, rgb(255, 215, 0), rgb(255, 193, 7));
+  transform: scale(1.05);
+}
+
+.eliza-send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.eliza-quota-warning {
+  text-align: center;
+  color: rgb(255, 140, 66);
+  font-size: 0.875rem;
+}
+
+.eliza-quota-exceeded {
+  text-align: center;
+  color: rgb(248, 113, 113);
+  font-size: 0.875rem;
+}
+
+.eliza-footer-left {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  color: rgba(255, 140, 66, 0.6);
+  font-size: 0.875rem;
+  text-shadow: 0 0 10px rgba(255, 140, 66, 0.5);
+}
+
+.eliza-footer-right {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  color: rgba(255, 140, 66, 0.6);
+  font-size: 0.75rem;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 140, 66, 0.3), 0 0 40px rgba(255, 140, 66, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(255, 140, 66, 0.5), 0 0 60px rgba(255, 140, 66, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes voice-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes speech-bubble {
+  0% { 
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .eliza-message {
+    max-width: 16rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .eliza-avatar {
+    width: 16rem;
+    height: 16rem;
+  }
+  
+  .eliza-input-section {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .eliza-send-button {
+    width: 100%;
+  }
+}

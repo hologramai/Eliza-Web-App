@@ -1,8 +1,7 @@
-
-import ElizaInterface from '@/components/ElizaInterface';
+import Eliza from './Eliza';
 
 const Index = () => {
-  return <ElizaInterface />;
+  return <Eliza />;
 };
 
 export default Index;
