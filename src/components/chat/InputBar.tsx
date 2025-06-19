@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { UserStatus } from '../../types';
 
 interface InputBarProps {
@@ -20,6 +21,37 @@ const InputBar: React.FC<InputBarProps> = ({
   userStatus,
   onOpenSignUp
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    // Expand input when text length exceeds 80 characters
+    const shouldExpand = inputValue.length >= 80;
+    
+    if (shouldExpand && !isExpanded) {
+      setIsExpanded(true);
+      // Focus the textarea after state change
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          // Move cursor to end
+          textareaRef.current.setSelectionRange(inputValue.length, inputValue.length);
+        }
+      }, 0);
+    } else if (!shouldExpand && isExpanded && !inputValue.includes('\n')) {
+      setIsExpanded(false);
+      // Focus the input after state change
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          // Move cursor to end
+          inputRef.current.setSelectionRange(inputValue.length, inputValue.length);
+        }
+      }, 0);
+    }
+  }, [inputValue, isExpanded]);
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -29,21 +61,39 @@ const InputBar: React.FC<InputBarProps> = ({
 
   const isDisabled = !inputValue.trim() || isTyping || userStatus.remainingMessages <= 0;
 
+  const inputClasses = "w-full bg-cyber-dark/60 border-cyber-pink/40 text-white placeholder-cyber-pink/60 rounded-2xl px-6 text-lg cyber-bg-blur backdrop-blur-md focus:border-cyber-magenta focus:ring-2 focus:ring-cyber-magenta/30 transition-all duration-300";
+
   return (
     <>
       <div className="flex space-x-3">
         <div className="flex-1 relative">
-          <Input
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Share your thoughts with Eliza..."
-            disabled={userStatus.remainingMessages <= 0}
-            className="w-full bg-cyber-dark/60 border-cyber-pink/40 text-white placeholder-cyber-pink/60 rounded-2xl px-6 py-4 text-lg cyber-bg-blur backdrop-blur-md focus:border-cyber-magenta focus:ring-2 focus:ring-cyber-magenta/30 transition-all duration-300"
-            style={{
-              boxShadow: '0 0 20px rgba(255, 20, 196, 0.1)'
-            }}
-          />
+          {isExpanded ? (
+            <Textarea
+              ref={textareaRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Share your thoughts with Eliza..."
+              disabled={userStatus.remainingMessages <= 0}
+              className={`${inputClasses} min-h-[120px] py-4 resize-none transition-all duration-300`}
+              style={{
+                boxShadow: '0 0 20px rgba(255, 20, 196, 0.1)'
+              }}
+            />
+          ) : (
+            <Input
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Share your thoughts with Eliza..."
+              disabled={userStatus.remainingMessages <= 0}
+              className={`${inputClasses} py-4 transition-all duration-300`}
+              style={{
+                boxShadow: '0 0 20px rgba(255, 20, 196, 0.1)'
+              }}
+            />
+          )}
         </div>
         <Button
           onClick={onSendMessage}

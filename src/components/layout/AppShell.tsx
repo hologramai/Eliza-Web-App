@@ -8,8 +8,12 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const backgroundVideoRef = useRef<HTMLVideoElement>(null);
 
   const videos = ['/videos/1.mp4', '/videos/2.mp4'];
+  
+  // Playback speeds for overlay videos
+  const videoSpeeds = [0.3, 0.2]; // 30% for video 1, 20% for video 2
 
   // Randomly select initial video on mount
   useEffect(() => {
@@ -20,9 +24,16 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
   // Set playback speed when video loads
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.5; // 50% speed
+      videoRef.current.playbackRate = videoSpeeds[currentVideoIndex];
     }
   }, [currentVideoIndex]);
+
+  // Set background video speed on mount
+  useEffect(() => {
+    if (backgroundVideoRef.current) {
+      backgroundVideoRef.current.playbackRate = 0.1; // 10% speed for video 3
+    }
+  }, []);
 
   // Handle video end event - fade to next video
   const handleVideoEnded = () => {
@@ -32,7 +43,7 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
     
     // Fade out current video
     setTimeout(() => {
-      // Move to next video in sequence (cycle through all 4)
+      // Move to next video in sequence (cycle through videos)
       setCurrentVideoIndex(prev => (prev + 1) % videos.length);
       setIsTransitioning(false);
     }, 1000); // 1 second fade duration
@@ -41,21 +52,34 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
   // Handle video load to set playback speed and ensure autoplay
   const handleVideoLoad = () => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.5; // 50% speed
+      videoRef.current.playbackRate = videoSpeeds[currentVideoIndex];
       videoRef.current.play().catch(e => console.log('Autoplay failed:', e));
     }
   };
 
+  // Handle background video load
+  const handleBackgroundVideoLoad = () => {
+    if (backgroundVideoRef.current) {
+      backgroundVideoRef.current.playbackRate = 0.1; // 10% speed
+      backgroundVideoRef.current.play().catch(e => console.log('Background autoplay failed:', e));
+    }
+  };
+
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background with cityscape */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/pics/2.png')`,
-          filter: 'blur(1px) brightness(0.7)'
-        }}
-      />
+    <div className="h-screen relative overflow-hidden">
+
+      <video
+        ref={backgroundVideoRef}
+        className="absolute inset-0 w-full h-full object-cover blur-sm brightness-75"
+        autoPlay
+        muted
+        loop
+        playsInline
+        onLoadedData={handleBackgroundVideoLoad}
+      >
+        <source src="/videos/3.mp4" type="video/mp4" />
+      </video>
+
       
       {/* Gradient overlay for better contrast */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyber-dark/30 to-cyber-dark/80" />

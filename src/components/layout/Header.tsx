@@ -1,23 +1,32 @@
 import React from 'react';
-import { Home, Twitter, Send, Wallet } from 'lucide-react';
+import { Home, Twitter, Send, Wallet, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserStatus, WalletState } from '../../types';
+import SignInDropdown from '../auth/SignInDropdown';
 
 interface HeaderProps {
   userStatus: UserStatus;
   wallet: WalletState;
+  googleUser: any;
   onConnectWallet: () => void;
   onDisconnectWallet: () => void;
+  onGoogleSignIn: () => void;
+  onSignOut: () => void;
   getShortAddress: () => string;
 }
 
 const Header: React.FC<HeaderProps> = ({
   userStatus,
   wallet,
+  googleUser,
   onConnectWallet,
   onDisconnectWallet,
+  onGoogleSignIn,
+  onSignOut,
   getShortAddress
 }) => {
+  const isAuthenticated = wallet.isConnected || googleUser;
+
   return (
     <header className="flex justify-between items-center p-4">
       <div className="flex items-center">
@@ -35,25 +44,41 @@ const Header: React.FC<HeaderProps> = ({
           Messages: {userStatus.messagesUsed}/{userStatus.totalMessages}
         </div>
         
-        {!wallet.isConnected ? (
-          <Button
-            onClick={onConnectWallet}
-            disabled={wallet.isConnecting}
-            variant="ghost"
-            className="text-white hover:bg-cyber-pink/20 hover:text-cyber-pink transition-colors"
-          >
-            <Wallet className="w-5 h-5 mr-2" />
-            {wallet.isConnecting ? 'Connecting...' : 'Connect Wallet'}
-          </Button>
+        {!isAuthenticated ? (
+          <SignInDropdown
+            onConnectWallet={onConnectWallet}
+            onGoogleSignIn={onGoogleSignIn}
+          />
         ) : (
-          <Button
-            onClick={onDisconnectWallet}
-            variant="ghost"
-            className="text-white hover:bg-cyber-pink/20 hover:text-cyber-pink transition-colors"
-          >
-            <Wallet className="w-5 h-5 mr-2" />
-            {getShortAddress()}
-          </Button>
+          <div className="flex items-center space-x-2">
+            {wallet.isConnected ? (
+              <Button
+                variant="ghost"
+                className="text-white hover:bg-cyber-pink/20 hover:text-cyber-pink transition-colors"
+              >
+                <Wallet className="w-5 h-5 mr-2" />
+                {getShortAddress()}
+              </Button>
+            ) : googleUser ? (
+              <div className="flex items-center space-x-2">
+                <img
+                  src={googleUser.picture}
+                  alt={googleUser.name}
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="text-white text-sm">{googleUser.name}</span>
+              </div>
+            ) : null}
+            
+            <Button
+              onClick={onSignOut}
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-cyber-pink/20 hover:text-cyber-pink transition-colors"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
+          </div>
         )}
         
         <Button

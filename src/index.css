@@ -122,3 +122,23 @@
 .border-cyber-pink\/40 { border-color: rgba(255, 20, 196, 0.4); }
 .border-cyber-magenta\/30 { border-color: rgba(232, 121, 249, 0.3); }
 .text-cyber-pink\/60 { color: rgba(255, 20, 196, 0.6); }
+
+
+/* Custom Scrollbar Styles */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(26, 15, 10, 0.4);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 20, 196, 0.3);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 20, 196, 0.5);
+}
