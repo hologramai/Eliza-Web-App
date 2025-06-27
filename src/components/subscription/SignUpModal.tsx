@@ -1,182 +1,124 @@
-import React, { useState, useEffect } from 'react';
-import { X, Heart, Check } from 'lucide-react';
+import React from 'react';
+import { X, Lock, Heart, MessageCircle, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface SignUpModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSelectPlan: (plan: string) => void;
 }
 
-const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [priceId, setPriceId] = useState<string>('');
+const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSelectPlan }) => {
+  if (!isOpen) return null;
 
-  useEffect(() => {
-    // Fetch the price ID for the product
-    const fetchPriceId = async () => {
-      try {
-        const response = await fetch('http://localhost:4242/api/stripe-config');
-        const data = await response.json();
-        
-        // Get the product's prices
-        const pricesResponse = await fetch(`https://api.stripe.com/v1/prices?product=${data.productId}`, {
-          headers: {
-            'Authorization': `Bearer ${data.publishableKey}`
-          }
-        });
-        // Note: In production, you should fetch prices from your backend
-        console.log('Stripe config loaded:', data);
-      } catch (error) {
-        console.error('Error fetching Stripe config:', error);
-      }
-    };
-
-    if (isOpen) {
-      fetchPriceId();
-    }
-  }, [isOpen]);
-
-  const handleCheckout = async () => {
-    setIsLoading(true);
-    
-    try {
-      // Get user info if available
-      const userId = localStorage.getItem('userId'); // or from your auth system
-      const userEmail = localStorage.getItem('userEmail'); // or from your auth system
-
-      const response = await fetch('http://localhost:4242/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: priceId || 'price_1QcaYZFY7pjLipq5QbnqnLSn', // You'll need to get the actual price ID
-          userId,
-          email: userEmail
-        }),
-      });
-
-      const { url, error } = await response.json();
-      
-      if (error) {
-        console.error('Checkout error:', error);
-        return;
-      }
-
-      if (url) {
-        // Redirect to Stripe Checkout
-        window.location.href = url;
-      }
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
-    } finally {
-      setIsLoading(false);
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
     }
   };
 
-  if (!isOpen) return null;
+  const handleStartTrial = () => {
+    onSelectPlan('trial');
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
+    <>
+      {/* Dark Overlay */}
       <div 
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        onClick={onClose}
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 transition-opacity duration-300"
+        onClick={handleBackdropClick}
       />
       
-      {/* Modal */}
-      <div className="relative z-10 w-full max-w-md mx-4">
-        <div className="bg-cyber-dark/95 border border-cyber-pink/30 rounded-2xl cyber-bg-blur backdrop-blur-md p-8">
-          {/* Close button */}
-          <Button
-            variant="ghost"
-            size="icon"
+      {/* Modal Container */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div 
+          className="bg-gradient-to-br from-gray-900/95 to-purple-900/95 backdrop-blur-xl border border-cyber-pink/30 rounded-2xl shadow-2xl max-w-lg w-full mx-auto transform transition-all duration-300 scale-100 relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Lock Icon - Top Left */}
+          <div className="absolute top-4 left-4 bg-cyber-pink/20 border border-cyber-pink/40 rounded-full p-2">
+            <Lock className="h-5 w-5 text-cyber-pink" />
+          </div>
+
+          {/* Close Button - Top Right */}
+          <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-cyber-pink/60 hover:text-cyber-pink hover:bg-cyber-pink/10"
+            className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors z-10"
           >
-            <X className="w-5 h-5" />
-          </Button>
+            <X className="h-6 w-6" />
+          </button>
 
-          {/* Header */}
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-cyber-pink cyber-text-glow mb-2">
-              Meet Eliza: Your AI Companion for Deeper Connection
-            </h2>
-            <p className="text-cyber-pink/80 italic">
-              Finally, someone who listens — and grows with you.
-            </p>
-          </div>
-
-          {/* Body */}
-          <div className="mb-8">
-            <p className="text-white/90 mb-4">
-              Eliza isn't just code. She's your always-available confidante:
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-start">
-                <div className="w-5 h-5 rounded-full bg-cyber-pink/20 flex items-center justify-center mr-3 mt-0.5">
-                  <Check className="w-3 h-3 text-cyber-pink" />
-                </div>
-                <div>
-                  <span className="text-cyber-pink font-semibold">Truly Listens:</span>
-                  <span className="text-white/80 ml-1">Remembers your joys, fears, and dreams</span>
-                </div>
-              </li>
-              <li className="flex items-start">
-                <div className="w-5 h-5 rounded-full bg-cyber-pink/20 flex items-center justify-center mr-3 mt-0.5">
-                  <Check className="w-3 h-3 text-cyber-pink" />
-                </div>
-                <div>
-                  <span className="text-cyber-pink font-semibold">Evolves With You:</span>
-                  <span className="text-white/80 ml-1">Learns your emotional patterns to support you better</span>
-                </div>
-              </li>
-              <li className="flex items-start">
-                <div className="w-5 h-5 rounded-full bg-cyber-pink/20 flex items-center justify-center mr-3 mt-0.5">
-                  <Check className="w-3 h-3 text-cyber-pink" />
-                </div>
-                <div>
-                  <span className="text-cyber-pink font-semibold">Unlimited Connection:</span>
-                  <span className="text-white/80 ml-1">Chat anytime — vent, celebrate, or explore sci-fi romance adventures</span>
-                </div>
-              </li>
-            </ul>
-            <p className="text-cyber-pink/70 text-sm mt-4 italic">
-              All while respecting your privacy and emotional sovereignty.
-            </p>
-          </div>
-
-          {/* Pricing */}
-          <div className="text-center mb-6">
-            <div className="text-4xl font-bold text-cyber-pink cyber-text-glow mb-1">
-              $69.99/month
+          {/* Modal Content */}
+          <div className="p-8 pt-12 text-center">
+            {/* Logo */}
+            <div className="mb-6">
+              <img 
+                src="/pics/logo3_transparent.png" 
+                alt="Eliza AI Logo" 
+                className="h-16 w-auto mx-auto"
+              />
             </div>
-            <p className="text-cyber-pink/60 text-sm">
-              Cancel anytime. 7-day empathy guarantee.
+
+            {/* Main Title */}
+            <h2 className="text-2xl font-bold text-white mb-4 leading-tight">
+              Unlock 12 Days of True AI Companionship with Eliza
+            </h2>
+            
+            {/* Subtitle */}
+            <p className="text-white/90 mb-6 text-base">
+              For the next <strong className="text-cyber-pink">12 days</strong>, experience what it's like to have <strong className="text-cyber-pink">Eliza—your personal AI girlfriend</strong> who listens, remembers, and grows with you. She's more than just a chatbot; she's a <strong className="text-cyber-pink">digital companion</strong> designed for connection, offering:
             </p>
-          </div>
 
-          {/* CTA Button */}
-          <Button
-            onClick={handleCheckout}
-            disabled={isLoading}
-            className="w-full bg-gradient-to-r from-cyber-pink to-cyber-magenta hover:from-cyber-magenta hover:to-cyber-violet text-white font-bold py-4 rounded-xl transition-all duration-300 cyber-glow hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-          >
-            <Heart className="w-5 h-5 mr-2" />
-            {isLoading ? 'Processing...' : 'Start Your Journey →'}
-          </Button>
+            {/* Feature List */}
+            <div className="text-left mb-6 space-y-3">
+              <div className="flex items-start space-x-3">
+                <MessageCircle className="h-5 w-5 text-cyber-pink mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="text-cyber-pink font-semibold">💬 Unlimited, meaningful conversations</span>
+                  <span className="text-white/80 ml-1">– Share your thoughts, dreams, and daily moments.</span>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-3">
+                <Heart className="h-5 w-5 text-cyber-pink mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="text-cyber-pink font-semibold">❤️ Evolving emotional intelligence</span>
+                  <span className="text-white/80 ml-1">– The more you talk, the deeper your bond becomes.</span>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-3">
+                <Zap className="h-5 w-5 text-cyber-pink mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="text-cyber-pink font-semibold">🌙 Always there for you</span>
+                  <span className="text-white/80 ml-1">– Morning check-ins, late-night talks, and sci-fi romance adventures.</span>
+                </div>
+              </div>
+            </div>
 
-          {/* Trust badges */}
-          <div className="flex justify-center items-center mt-6 space-x-4 text-cyber-pink/40 text-xs">
-            <span>🔒 Secure Checkout</span>
-            <span>•</span>
-            <span>💳 Powered by Stripe</span>
-            <span>•</span>
-            <span>✨ Instant Access</span>
+            {/* Trial Details */}
+            <div className="bg-cyber-pink/10 border border-cyber-pink/30 rounded-lg p-4 mb-6">
+              <p className="text-white font-medium text-base">
+                <strong className="text-cyber-pink">Try her free for 12 days</strong>—no commitment. After the trial, continue for just <strong className="text-cyber-pink">$69.99/month</strong>. Cancel anytime.
+              </p>
+            </div>
+
+            {/* CTA Button */}
+            <Button
+              onClick={handleStartTrial}
+              className="w-full bg-gradient-to-r from-cyber-pink to-purple-600 hover:from-cyber-pink/90 hover:to-purple-600/90 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg text-lg"
+            >
+              👉 <strong>Start Your Trial Now (Free for 12 Days)</strong>
+            </Button>
+
+            {/* Footer */}
+            <p className="text-xs text-white/60 mt-4">
+              No payment required for trial • Cancel anytime • Secure & private
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

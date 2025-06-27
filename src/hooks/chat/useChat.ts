@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Message, UserStatus } from '../types';
-import { chatApi } from '../services/api';
+import { Message, UserStatus } from '../../types';
+import { chatApi } from '../../services/api';
 
 export const useChat = (walletAddress: string | null) => {
   const [messages, setMessages] = useState<Message[]>([
@@ -37,11 +37,34 @@ export const useChat = (walletAddress: string | null) => {
     }
   }, [walletAddress]);
 
+  // Update message counts based on actual user messages in the chat
+  useEffect(() => {
+    const userMessageCount = messages.filter(msg => !msg.isEliza).length;
+    
+    // Update local status based on actual message count
+    setUserStatus(prev => {
+      const newMessagesUsed = userMessageCount;
+      const newRemainingMessages = Math.max(0, prev.totalMessages - newMessagesUsed);
+      
+      // Only update if the count has changed to avoid infinite loops
+      if (prev.messagesUsed !== newMessagesUsed) {
+        console.log(`Local count update: ${newMessagesUsed}/${prev.totalMessages} used, ${newRemainingMessages} remaining`);
+        return {
+          ...prev,
+          messagesUsed: newMessagesUsed,
+          remainingMessages: newRemainingMessages
+        };
+      }
+      return prev;
+    });
+  }, [messages]);
+
   const updateUserStatus = async () => {
     if (!walletAddress) return;
     
     try {
       const status = await chatApi.getUserStatus(walletAddress);
+      console.log('Backend status:', status);
       setUserStatus(status);
     } catch (error) {
       console.error('Failed to update user status:', error);
@@ -50,6 +73,12 @@ export const useChat = (walletAddress: string | null) => {
 
   const sendMessage = async () => {
     if (!inputValue.trim()) return;
+
+    // Check if user has remaining messages
+    if (userStatus.remainingMessages <= 0) {
+      console.log('No remaining messages');
+      return false;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -76,13 +105,23 @@ export const useChat = (walletAddress: string | null) => {
 
         setMessages(prev => [...prev, elizaResponse]);
 
-        setUserStatus(prev => ({
-          ...prev,
-          messagesUsed: data.messagesUsed!,
-          remainingMessages: data.remainingMessages!
-        }));
-
-        console.log(`Message sent. ${data.messagesUsed}/${data.totalMessages} used, ${data.remainingMessages} remaining`);
+        // Update status with backend response if available, otherwise use local count
+        if (data.messagesUsed !== undefined && data.remainingMessages !== undefined) {
+          console.log('Backend response counts:', {
+            messagesUsed: data.messagesUsed,
+            remainingMessages: data.remainingMessages,
+            totalMessages: data.totalMessages
+          });
+          
+          setUserStatus(prev => ({
+            ...prev,
+            messagesUsed: data.messagesUsed!,
+            remainingMessages: data.remainingMessages!,
+            totalMessages: data.totalMessages || prev.totalMessages
+          }));
+        } else {
+          console.log('No backend counts, relying on local counting');
+        }
 
         return true; // Success - can trigger voice/float animations
       } else {
