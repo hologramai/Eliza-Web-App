@@ -1,10 +1,12 @@
-// src/services/ApiService.tsx
+// src/services/api.ts
 import { Message, UserStatus, ChatResponse } from '../types';
 
-// Use environment variable for API base URL, fallback to localhost for development
-const API_BASE = process.env.NODE_ENV === 'production' 
-  ? process.env.REACT_APP_API_URL || 'https://eliza-web-app.vercel.app/'
+// For Vite projects, use import.meta.env instead of process.env
+const API_BASE = import.meta.env.PROD 
+  ? 'https://eliza-web-app.vercel.app'  // Your actual Vercel URL
   : 'http://127.0.0.1:8080';
+
+console.log('API_BASE:', API_BASE); // Debug log
 
 export const chatApi = {
   async sendMessage(
@@ -13,6 +15,8 @@ export const chatApi = {
     chatHistory: Message[]
   ): Promise<ChatResponse> {
     try {
+      console.log('Sending request to:', `${API_BASE}/api/chat`); // Debug log
+      
       const response = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: {
