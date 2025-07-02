@@ -2,7 +2,7 @@ import React from 'react';
 import { Home, Twitter, Send, Wallet, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserStatus, WalletState } from '../../types';
-import SignInDropdown from '../auth/SignInDropdown';
+import SignInDropdown from '../auth/SignInDropDown';
 
 interface HeaderProps {
   userStatus: UserStatus;
