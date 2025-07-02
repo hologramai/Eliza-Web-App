@@ -1,6 +1,10 @@
+// src/services/ApiService.tsx
 import { Message, UserStatus, ChatResponse } from '../types';
 
-const API_BASE = 'http://127.0.0.1:8080';
+// Use environment variable for API base URL, fallback to localhost for development
+const API_BASE = process.env.NODE_ENV === 'production' 
+  ? process.env.REACT_APP_API_URL || 'https://eliza-web-app.vercel.app/'
+  : 'http://127.0.0.1:8080';
 
 export const chatApi = {
   async sendMessage(
@@ -8,39 +12,49 @@ export const chatApi = {
     message: string,
     chatHistory: Message[]
   ): Promise<ChatResponse> {
-    const response = await fetch(`${API_BASE}/api/chat`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        wallet,
-        message,
-        chatHistory
-      }),
-    });
+    try {
+      const response = await fetch(`${API_BASE}/api/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          wallet,
+          message,
+          chatHistory
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error;
     }
-
-    return response.json();
   },
 
   async getUserStatus(walletAddress: string): Promise<UserStatus> {
-    const response = await fetch(`${API_BASE}/api/user-status`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ wallet: walletAddress }),
-    });
+    try {
+      const response = await fetch(`${API_BASE}/api/user-status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ wallet: walletAddress }),
+      });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error;
     }
-
-    return response.json();
   }
 };
 
